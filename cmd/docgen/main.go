@@ -10,7 +10,7 @@ import (
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Error: Missing arguments.")
-		fmt.Println("Usage: go run main.go [file.*] ")
+		fmt.Println("Usage: go run main.go [dirpath]")
 		return
 	}
 	aux := os.Args[1]
