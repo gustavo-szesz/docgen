@@ -14,7 +14,8 @@ func main() {
 		return
 	}
 	aux := os.Args[1]
-	scanner.DirScan(aux)
+	mapped_directory := scanner.DirScan(aux)
+	fmt.Println(mapped_directory)
 
 	// conteudo, err := os.ReadFile(aux)
 	// if err != nil {

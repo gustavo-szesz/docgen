@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
-func DirScan(dirpath string) {
-	var listDocs []string
+var listDocs []string
+
+func DirScan(dirpath string) []string {
 	entries, err := os.ReadDir(dirpath)
 	if err != nil {
 		log.Fatal(err)
@@ -18,11 +20,22 @@ func DirScan(dirpath string) {
 		fmt.Println(e.Name())
 
 		if e.IsDir() {
-			if strings.Contains(e.Name(), ".go") {
+			if e.Name() == ".git" {
+				continue
+			}
+
+			var aux string = filepath.Join(dirpath, e.Name())
+			DirScan(aux)
+			fmt.Print(dirpath + "/" + e.Name()) // TODO: Improve for Windows Users
+		} else {
+			if strings.HasSuffix(e.Name(), ".go") {
 				listDocs = append(listDocs, e.Name())
+
+				fmt.Println("Found:", e.Name())
 			}
 		}
 
 	}
+	return listDocs
 
 }
