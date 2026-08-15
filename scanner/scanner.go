@@ -8,6 +8,7 @@ import (
 )
 
 func DirScan(dirpath string) {
+	var listDocs []string
 	entries, err := os.ReadDir(dirpath)
 	if err != nil {
 		log.Fatal(err)
@@ -16,26 +17,10 @@ func DirScan(dirpath string) {
 	for _, e := range entries {
 		fmt.Println(e.Name())
 
-		info, err := os.Stat(dirpath)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("Diretorio?", info.IsDir())
-		if info.IsDir() {
-			go_deep, err := os.Stat(dirpath)
-			if err != nil {
-				panic(err)
+		if e.IsDir() {
+			if strings.Contains(e.Name(), ".go") {
+				listDocs = append(listDocs, e.Name())
 			}
-			var name = fmt.Println(go_deep.Name())
-
-			if name {
-				if strings.Contains(name) {
-
-				}
-			}
-
-			fmt.Println(go_deep.Name())
-
 		}
 
 	}
