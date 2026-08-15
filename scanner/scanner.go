@@ -8,9 +8,8 @@ import (
 	"strings"
 )
 
-var listDocs []string
-
 func DirScan(dirpath string) []string {
+	var listDocs []string
 	entries, err := os.ReadDir(dirpath)
 	if err != nil {
 		log.Fatal(err)
@@ -18,20 +17,27 @@ func DirScan(dirpath string) []string {
 
 	for _, e := range entries {
 		fmt.Println(e.Name())
-
 		if e.IsDir() {
+
 			if e.Name() == ".git" {
 				continue
 			}
 
-			var aux string = filepath.Join(dirpath, e.Name())
-			DirScan(aux)
-			fmt.Print(dirpath + "/" + e.Name()) // TODO: Improve for Windows Users
+			newPath := filepath.Join(dirpath, e.Name())
+			findFiles := DirScan(newPath)
+
+			listDocs = append(listDocs, findFiles...)
+
 		} else {
 			if strings.HasSuffix(e.Name(), ".go") {
-				listDocs = append(listDocs, e.Name())
 
-				fmt.Println("Found:", e.Name())
+				completePath := filepath.Join(
+					dirpath,
+					e.Name(),
+				)
+				listDocs = append(listDocs, completePath)
+
+				fmt.Println("Found:", completePath)
 			}
 		}
 

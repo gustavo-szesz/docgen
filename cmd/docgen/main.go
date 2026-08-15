@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gustavo-szesz/docgen/scanner"
@@ -14,13 +15,17 @@ func main() {
 		return
 	}
 	aux := os.Args[1]
-	mapped_directory := scanner.DirScan(aux)
-	fmt.Println(mapped_directory)
+	mapped_directorys := scanner.DirScan(aux)
+	fmt.Println(mapped_directorys)
 
-	// conteudo, err := os.ReadFile(aux)
-	// if err != nil {
-	// 	log.Fatal(err)
+	for _, file := range mapped_directorys {
+		content, err := os.ReadFile(file)
 
-	// }
-	// fmt.Println(string(conteudo))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println(string(content))
+	}
+
 }
