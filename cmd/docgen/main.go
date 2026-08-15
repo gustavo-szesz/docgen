@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"go/parser"
+	"go/token"
 	"os"
 
 	"github.com/gustavo-szesz/docgen/scanner"
@@ -18,14 +19,24 @@ func main() {
 	mapped_directorys := scanner.DirScan(aux)
 	fmt.Println(mapped_directorys)
 
+	// reading the doc, TODO: SRP
 	for _, file := range mapped_directorys {
 		content, err := os.ReadFile(file)
-
 		if err != nil {
-			log.Fatal(err)
+			break
 		}
 
-		fmt.Println(string(content))
+		fileset := token.NewFileSet()
+
+		ast, err := parser.ParseFile(
+			fileset,
+			file,
+			content,
+			parser.ParseComments,
+		)
+
+		fmt.Print(ast)
+
 	}
 
 }
