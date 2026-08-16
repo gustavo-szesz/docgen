@@ -12,6 +12,7 @@ type FunctionInfo struct {
 	Reciver string
 	Params  []string
 	Returns []string
+	Calls   []string
 }
 
 func AnalyzeFile(file string) (*ast.File, error) {
@@ -57,42 +58,40 @@ func GetImports(astFile *ast.File) []string {
 	return listImports
 }
 
-func GetFunctionsCalls(astFile *ast.File) []FunctionInfo {
-	listFunctions := []FunctionInfo{}
+func GetFunctions(funcDecl *ast.FuncDecl) []string {
+	//listFunctions := []FunctionInfo{}
+	var calls []string
 
-	for _, e := range astFile.Decls {
-		funcDect, ok := e.(*ast.FuncDecl)
-		if !ok {
-			continue
-		}
-
-		info := FunctionInfo{}
-		info.Name = funcDect.Name.Name
-
-		if funcDect.Recv != nil && len(funcDect.Recv.List) > 0 {
-			info.Reciver = FormatType(funcDect.Recv.List[0].Type)
-		}
-
-		if funcDect.Type.Params != nil {
-			for _, field := range funcDect.Type.Params.List {
-				typeText := FormatType(field.Type)
-				for _, name := range field.Names {
-					info.Params = append(info.Params, name.Name+" "+typeText)
-				}
-			}
-		}
-		if funcDect.Type.Results != nil {
-			for _, field := range funcDect.Type.Results.List {
-				info.Returns = append(info.Returns, FormatType(field.Type))
-			}
-		}
-
-		listFunctions = append(listFunctions, info)
-
+	if funcDecl.Body == nil {
+		return calls
 	}
-	return listFunctions
+
+	ast.Inspect(funcDecl.Body, func(node ast.Node) bool {
+		callExpr, ok := node.(*ast.CallExpr)
+		if !ok {
+			return true
+		}
+
+		name := extracCallName(callExpr.Fun)
+		if name != "" {
+			calls = append(calls, name)
+		}
+		return true
+	})
+
+	return calls
 }
 
+func extracCallName(expr ast.Expr) string {
+	switch v := expr.(type) {
+	case *ast.Ident:
+		return v.Name
+	case *ast.SelectorExpr:
+		return FormatType(v.X) + "." + v.Sel.Name
+	default:
+		return ""
+	}
+}
 func FormatType(expre ast.Expr) string {
 	switch v := expre.(type) {
 	case *ast.Ident:

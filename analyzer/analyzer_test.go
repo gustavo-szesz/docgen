@@ -47,4 +47,14 @@ func TestGetImports(t *testing.T) {
 		}
 	}
 
-}
+// }
+
+// func TestGetFunctionCalls(t *testing.T) {
+// 	astFile, err := AnalyzeFile("testdata/with_functions.go")
+// 	if err != nil {
+// 		t.Fatalf("Not expected error: %v", err)
+// 	}
+// 	result := GetFunctionsCalls(astFile)
+
+
+// }
