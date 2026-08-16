@@ -1,4 +1,4 @@
-###docgen
+# docgen
 
 docgen is a command-line tool written in Go that analyzes Go source code and organizes its functions into a hierarchy, making it easier to read, document, and navigate large codebases.
 
