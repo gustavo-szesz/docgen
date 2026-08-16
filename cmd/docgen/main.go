@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"go/parser"
-	"go/token"
 	"os"
 
+	"github.com/gustavo-szesz/docgen/analyzer"
 	"github.com/gustavo-szesz/docgen/scanner"
 )
 
@@ -19,24 +18,29 @@ func main() {
 	mapped_directorys := scanner.DirScan(aux)
 	fmt.Println(mapped_directorys)
 
-	// reading the doc, TODO: SRP
-	for _, file := range mapped_directorys {
-		content, err := os.ReadFile(file)
-		if err != nil {
-			break
-		}
-
-		fileset := token.NewFileSet()
-
-		ast, err := parser.ParseFile(
-			fileset,
-			file,
-			content,
-			parser.ParseComments,
-		)
-
-		fmt.Print(ast)
-
-	}
-
+	analyzer.AnalyzeFile(aux)
 }
+
+// reading the doc, TODO: SRP
+// for _, file := range mapped_directorys {
+// 	content, err := os.ReadFile(file)
+// 	if err != nil {
+// 		break
+// 	}
+
+// 	fileset := token.NewFileSet()
+
+// 	ast, err := parser.ParseFile(
+// 		fileset,
+// 		file,
+// 		content,
+// 		parser.ParseComments,
+// 	)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	fmt.Println("==========================")
+// 	fmt.Println("File: " + file)
+// 	fmt.Println("==========================")
+// 	fmt.Println("Packege:", ast.Name)
