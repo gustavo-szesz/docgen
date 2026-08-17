@@ -37,6 +37,8 @@ analyzer.GetPackageName / GetImports / GetFunctions
 structured function data (name, params, returns, calls)
 Development approach
 ```
+Check ARCHITECTURE.md for details
+
 This project is built as a learning exercise, one GitHub issue at a time. Each issue introduces one small, focused piece of functionality (e.g. "extract package name", "extract function signatures", "detect function calls"), with tests added alongside each feature under testdata/.
 
 Running tests
