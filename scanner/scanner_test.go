@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// Test scanner
 func TestFindGoFiles(t *testing.T) {
 	// Arrange
 	root := "testdata/fake_project"
